@@ -58,7 +58,7 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private fun initRetrofit(){
+    private fun initRetrofit() {
         val interceptor = HttpLoggingInterceptor()
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
@@ -70,26 +70,32 @@ class LoginFragment : Fragment() {
             .baseUrl("https://dummyjson.com")
             .addConverterFactory(GsonConverterFactory.create()).build()
 
-         mainapi = retrofit.create(MainApi::class.java)
+        mainapi = retrofit.create(MainApi::class.java)
     }
 
-    private fun auth(authRequest: AuthRequest){
+    private fun auth(authRequest: AuthRequest) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = mainapi.auth(authRequest)
-            val message = response.errorBody()?.string()?.let { JSONObject(it).getString("message") }
+            val message =
+                response.errorBody()?.string()?.let { JSONObject(it).getString("message") }
             requireActivity().runOnUiThread {
-                binding.error.text = message
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                if (message != null) {
+                    binding.error.text = message
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
                 val user = response.body()
-                if(user != null){
-                    Toast.makeText(context, "you are register, please click next", Toast.LENGTH_SHORT).show()
+                if (user != null) {
+                    Toast.makeText(
+                        context,
+                        "you are register, please click next",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     viewModel.token.value = user.token
                     viewModel.email.value = user.email
                     viewModel.nickname.value = user.firstName
                     binding.bNext.visibility = View.VISIBLE
                 }
             }
-
         }
     }
 }
