@@ -12,10 +12,25 @@
         <action
             android:id="@+id/action_LoginFragment_to_navActivity"
             app:destination="@id/navActivity" />
+        <action
+            android:id="@+id/action_LoginFragment_to_signUpFragment"
+            app:destination="@id/signUpFragment" />
     </fragment>
     <activity
         android:id="@+id/navActivity"
         android:name="com.example.hackaton.NavActivity"
         android:label="activity_nav"
         tools:layout="@layout/activity_nav" />
+    <fragment
+        android:id="@+id/signUpFragment"
+        android:name="com.example.hackaton.fragment.SignUpFragment"
+        android:label="fragment_sign_up"
+        tools:layout="@layout/fragment_sign_up" >
+        <action
+            android:id="@+id/action_signUpFragment_to_LoginFragment"
+            app:destination="@id/LoginFragment" />
+        <action
+            android:id="@+id/action_signUpFragment_to_navActivity"
+            app:destination="@id/navActivity" />
+    </fragment>
 </navigation>

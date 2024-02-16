@@ -12,7 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.hackaton.LiveData.LoginViewModel
 import com.example.hackaton.R
 import com.example.hackaton.databinding.FragmentLoginBinding
-import com.example.hackaton.entity.AuthRequest
+import com.example.hackaton.databinding.FragmentSignUpBinding
+import com.example.hackaton.entity.RegisterRequest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,42 +23,34 @@ import org.json.JSONObject
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class LoginFragment : Fragment() {
+class SignUpFragment : Fragment() {
     private lateinit var mainapi: MainApi
-    private lateinit var binding: FragmentLoginBinding
+    private lateinit var binding: FragmentSignUpBinding
     private val viewModel: LoginViewModel by activityViewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        binding = FragmentSignUpBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRetrofit()
         binding.apply {
-
-
-            SIgnUp.setOnClickListener{
-                findNavController().navigate(R.id.action_LoginFragment_to_signUpFragment)
+            buttonSignIn.setOnClickListener{
+                findNavController().navigate(R.id.action_signUpFragment_to_LoginFragment)
             }
-
-            SignIn.setOnClickListener {
-                auth(
-                    AuthRequest(
-                        login.text.toString(),
-                        password.text.toString()
-                    )
+            buttonSignUp.setOnClickListener {
+                signup(
+                    RegisterRequest(editTextSignUpEmail.text.toString(),
+                    editTextUsername.text.toString(),
+                    editTextSignUpPassword.text.toString())
                 )
-            }
-        }
-    }
+                }
+        }}
 
     private fun initRetrofit() {
         val interceptor = HttpLoggingInterceptor()
@@ -74,28 +67,27 @@ class LoginFragment : Fragment() {
         mainapi = retrofit.create(MainApi::class.java)
     }
 
-    private fun auth(authRequest: AuthRequest) {
+    private fun signup(request: RegisterRequest){
         CoroutineScope(Dispatchers.IO).launch {
-            val response = mainapi.auth(authRequest)
+            val response = mainapi.register(request)
             val message =
-                response.errorBody()?.string()?.let { JSONObject(it).getString("message") }
-            requireActivity().runOnUiThread {
-                if (message != null) {
-                    binding.error.text = message
+            response.errorBody()?.string()?.let { JSONObject(it).getString("message") }
+            requireActivity().runOnUiThread{
+                if(message != null){
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
                 val user = response.body()
-                println(user)
-                if (user != null) {
+                if (user != null){
                     Toast.makeText(
                         context,
-                        "you are register, please click next",
+                        "you are register",
                         Toast.LENGTH_SHORT
                     ).show()
-                    findNavController().navigate(R.id.action_LoginFragment_to_navActivity)
+                    findNavController().navigate(R.id.action_signUpFragment_to_navActivity)
                     viewModel.token.value = user.access_token
                 }
             }
         }
     }
+
 }
