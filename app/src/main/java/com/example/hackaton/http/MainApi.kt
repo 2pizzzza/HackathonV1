@@ -5,7 +5,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface MainApi {
-    @POST("auth/login")
+    @POST("users/login")
     suspend fun auth(@Body authRequest: AuthRequest):Response<User>
 //    @Headers("Content-Type: application/json")
 //    @GET("auth/users")

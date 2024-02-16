@@ -13,5 +13,5 @@ class BaseActivity : AppCompatActivity() {
 
         binding = ContentBaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        }
     }
+}

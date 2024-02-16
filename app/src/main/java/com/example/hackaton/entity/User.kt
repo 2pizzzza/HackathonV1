@@ -1,12 +1,5 @@
 package com.example.hackaton.entity
 
 data class User(
-    val id: Int,
-    val username: String,
-    val email: String,
-    val firstName: String,
-    val lastName: String,
-    val gender: String,
-    val image: String,
-    val token: String
+    val access_token: String
 )

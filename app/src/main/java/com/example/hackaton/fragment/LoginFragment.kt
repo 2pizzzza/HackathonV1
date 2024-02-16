@@ -1,4 +1,4 @@
-package com.example.hackaton
+package com.example.hackaton.fragment
 
 import MainApi
 import android.os.Bundle
@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.hackaton.LiveData.LoginViewModel
+import com.example.hackaton.R
 import com.example.hackaton.databinding.FragmentLoginBinding
 import com.example.hackaton.entity.AuthRequest
 import kotlinx.coroutines.CoroutineScope
@@ -43,7 +44,7 @@ class LoginFragment : Fragment() {
         binding.apply {
 
             bNext.setOnClickListener {
-                findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+                findNavController().navigate(R.id.action_LoginFragment_to_navActivity)
                 viewModel.token.value = "kajhsdkjsajsgbfdj"
             }
 
@@ -67,7 +68,7 @@ class LoginFragment : Fragment() {
             .build()
 
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://dummyjson.com")
+            .baseUrl("https://sanjarman.pythonanywhere.com/api/v1/")
             .addConverterFactory(GsonConverterFactory.create()).build()
 
         mainapi = retrofit.create(MainApi::class.java)
@@ -76,6 +77,8 @@ class LoginFragment : Fragment() {
     private fun auth(authRequest: AuthRequest) {
         CoroutineScope(Dispatchers.IO).launch {
             val response = mainapi.auth(authRequest)
+            val responseBody = response.errorBody()?.string() ?: response.body()?.toString()
+            println("Response body: $responseBody")
             val message =
                 response.errorBody()?.string()?.let { JSONObject(it).getString("message") }
             requireActivity().runOnUiThread {
@@ -84,15 +87,14 @@ class LoginFragment : Fragment() {
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                 }
                 val user = response.body()
+                println(user)
                 if (user != null) {
                     Toast.makeText(
                         context,
                         "you are register, please click next",
                         Toast.LENGTH_SHORT
                     ).show()
-                    viewModel.token.value = user.token
-                    viewModel.email.value = user.email
-                    viewModel.nickname.value = user.firstName
+                    viewModel.token.value = user.access_token
                     binding.bNext.visibility = View.VISIBLE
                 }
             }

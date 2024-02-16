@@ -1,4 +1,4 @@
-package com.example.hackaton
+package com.example.hackaton.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater

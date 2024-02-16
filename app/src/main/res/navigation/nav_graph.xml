@@ -7,14 +7,15 @@
 
     <fragment
         android:id="@+id/LoginFragment"
-        android:name="com.example.hackaton.LoginFragment"
+        android:name="com.example.hackaton.fragment.LoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/HomeFragment" />
+            android:id="@+id/action_LoginFragment_to_navActivity"
+            app:destination="@id/navActivity" />
     </fragment>
-    <fragment
-        android:id="@+id/HomeFragment"
-        android:name="com.example.hackaton.HomeFragment"
-        tools:layout="@layout/fragment_home"/>
+    <activity
+        android:id="@+id/navActivity"
+        android:name="com.example.hackaton.NavActivity"
+        android:label="activity_nav"
+        tools:layout="@layout/activity_nav" />
 </navigation>
