@@ -15,7 +15,6 @@ This is a language learning app designed to help users learn the Kyrgyz language
 - **Kotlin**: The app is written in Kotlin, a modern programming language for Android development.
 - **Android Studio**: The official IDE for Android app development, used to build and debug the app.
 - **Firebase**: Utilized for user authentication, data storage, and real-time database functionality.
-- **Duolingo API**: Integrates with the Duolingo API to access language learning content and resources.
 
 ## Getting Started
 
